@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="ru">
+
+    <head>
+        <meta charset="UTF-8">
+        <title>Wnet</title>
+        <script type="text/javascript" src="xmlhttprequest.js"></script>
+
+        <script type="text/javascript">
+
+
+            function getVar   (){
+
+                var id = document.getElementById("id").value;
+
+                if (document.getElementById("w").checked === true){
+                    var  w = document.getElementById("w").value;
+                }else {
+                    w = null;
+                }
+
+                if (document.getElementById("c").checked === true){
+                    var c = document.getElementById("c").value;
+                }else {
+                    c = null;
+                }
+
+                if (document.getElementById("d").checked === true){
+                    var   d = document.getElementById("d").value;
+                }else{
+                    d = null;
+                }
+
+                getJSON(id, w, c, d);
+
+            }
+
+            function getJSON(id, w, c, d){
+                var req = getXmlHttpRequest();
+                req.onreadystatechange = function () {
+
+                    if(req.readyState != 4)return;
+                    if(req.status != 200) {
+                        alert('Что то случилось' + req.statusText);
+                        return;
+                    }
+                    var json = req.responseText;
+                    var clients = JSON.parse(json);
+                        var w = window.open("", "");
+                        w.document.write("<html><head><title>Тестовое задание</title></head><body><table>");
+                    for(i = 0; i < clients.length; i++){
+                        w.document.write("<tr><td colspan='2'><b>Информация про клиента </b></td></tr>");
+                        w.document.write("<tr>");
+                        w.document.write("<td>Название клиента:</td>");
+                        w.document.write("<td>" + clients[i].name_customer + "</td>");
+                        w.document.write("</tr>");
+                        w.document.write("<td>Компания:</td>");
+                        w.document.write("<td>" + clients[i].company + "</td>");
+                        w.document.write("</tr>");
+                        w.document.write("<tr><td colspan='2'><b>Информация про договор</b></td></tr>");
+                        w.document.write("<tr>");
+                        w.document.write("<td>Номер договора:</td>");
+                        w.document.write("<td>" + clients[i].number + "</td>");
+                        w.document.write("</tr>");
+                        w.document.write("<td>Дата подписания:</td>");
+                        w.document.write("<td>" + clients[i].date_sign + "</td>");
+                        w.document.write("</tr>");
+                        w.document.write("<tr><td colspan='2'><b>Информация про сервисы</b></td></tr>");
+                        w.document.write("<td>" + clients[i].status + "<br>" + clients[i].title_service + "</td>");
+                    }
+                    w.document.write("</table></body></html>");
+
+                }
+                req.open("GET", "json.php?" + "id=" + id + "&w=" + w + "&c=" + c + "&d=" + d, true);
+                req.send(null);
+            }
+
+        </script>
+    </head>
+
+    <body>
+    
+        <form  action="#" onsubmit="return false">
+            Введите имя или ID клиента: <br />
+            <input id="id" type="text" size="25" maxlength="30" value="" /> <br />
+            Обязательно укажите checkbox:<br />
+            <input type="checkbox" id="w" value="work" >work<br />
+            <input type="checkbox" id="c" value="connecting" >connecting<br />
+            <input type="checkbox" id="d" value="disconnected" >disconnected<br />
+            <input onclick="getVar();" type="submit" name="enter" value="Отправить" />
+        </form>
+
+    </body>
+
+</html>

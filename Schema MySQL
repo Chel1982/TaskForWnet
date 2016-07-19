@@ -1,0 +1,39 @@
+CREATE SCHEMA IF NOT EXISTS `Wnet` DEFAULT CHARACTER SET utf8 ;
+
+CREATE TABLE IF NOT EXISTS `Wnet`.`obj_contracts` (
+  `id_contract` INT(11) NOT NULL AUTO_INCREMENT,
+  `id_customer` INT(11) NOT NULL,
+  `number` VARCHAR(100) NULL DEFAULT NULL,
+  `date_sign` DATE NULL DEFAULT NULL,
+  `staff_number` VARCHAR(100) NULL DEFAULT NULL,
+  PRIMARY KEY (`id_contract`),
+  INDEX `fk_obj_contracts_obj_customers1_idx` (`id_customer` ASC),
+  CONSTRAINT `fk_obj_contracts_obj_customers1`
+    FOREIGN KEY (`id_customer`)
+    REFERENCES `Wnet`.`obj_customers` (`id_customer`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+CREATE TABLE IF NOT EXISTS `Wnet`.`obj_customers` (
+  `id_customer` INT(11) NOT NULL AUTO_INCREMENT,
+  `name_customer` VARCHAR(250) NULL DEFAULT NULL,
+  `company` ENUM('company_1', 'company_2', 'company_3') NULL DEFAULT NULL,
+  PRIMARY KEY (`id_customer`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+CREATE TABLE IF NOT EXISTS `Wnet`.`obj_services` (
+  `id_contract` INT(11) NOT NULL,
+  `id_service` INT(11) NOT NULL AUTO_INCREMENT,
+  `title_service` VARCHAR(250) NULL DEFAULT NULL,
+  `status` ENUM('work', 'connecting', 'disconnected') NULL DEFAULT NULL,
+  PRIMARY KEY (`id_service`),
+  CONSTRAINT `fk_obj_services_obj_contracts1`
+    FOREIGN KEY (`id_contract`)
+    REFERENCES `Wnet`.`obj_contracts` (`id_contract`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
